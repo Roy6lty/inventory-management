@@ -1,0 +1,58 @@
+version: "3.1"
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+    networks:
+      mynet123:
+        ipv4_address: 10.0.0.2
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_SERVER: mongodb
+
+    networks:
+      mynet123:
+        ipv4_address: 10.0.0.3
+
+  postgres:
+    image: postgres
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: ${POSTGRESS_USER}
+      POSTGRES_PASSWORD: ${POSTGRESS_PASSWORD}
+
+    networks:
+      mynet123:
+        ipv4_address: 10.0.0.4
+
+  my-app:
+    build:
+      context: .
+      dockerfile: ./app/docker/dockerfile
+
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    networks:
+      mynet123:
+        ipv4_address: 10.0.0.5
+
+networks:
+  mynet123:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16
