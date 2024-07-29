@@ -22,6 +22,13 @@ jobs:
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
+      - name: Create .env file
+        run: |
+          echo MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }} >> .env
+          echo MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }} >> .env
+          echo POSTGRESS_USER=${{ secrets.POSTGRESS_USER }} >> .env
+          echo POSTGRESS_PASSWORD=${{ secrets.POSTGRESS_PASSWORD }} >> .env
+
       - name: Run Docker Compose
         run: |
-          docker-compose -f path/to/your/docker-compose.yml --env-file .env up -d
+          docker-compose -f mongo_services.yml --env-file .env up -d
