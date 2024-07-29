@@ -11,6 +11,7 @@ on:
 jobs:
   run-docker-compose:
     runs-on: self-hosted
+    environment: dev
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
