@@ -31,4 +31,4 @@ jobs:
 
       - name: Run Docker Compose
         run: |
-          docker-compose -f mongo_services.yml --env-file .env up -d
+          docker compose -f mongo_services.yml --env-file .env up -d
